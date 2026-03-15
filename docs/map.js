@@ -9,8 +9,8 @@
 const CENTER = [137.113, 37.457];
 const INITIAL_ZOOM = 14;
 
-// OSM タイルURL
-const OSM_TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+// 地理院タイル（淡色）URL
+const GSI_PALE_URL = "https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png";
 
 // タイル URL（GitHub Pages 相対パス）
 const TILE_BASE = location.pathname.replace(/\/$/, "").replace(/\/index\.html$/, "");
@@ -29,12 +29,12 @@ function createMapStyle(slopeTileUrl) {
   return {
     version: 8,
     sources: {
-      osm: {
+      basemap: {
         type: "raster",
-        tiles: [OSM_TILE_URL],
+        tiles: [GSI_PALE_URL],
         tileSize: 256,
-        attribution: "© <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
-        maxzoom: 19
+        attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>国土地理院</a>",
+        maxzoom: 18
       },
       slope: {
         type: "raster",
@@ -47,9 +47,9 @@ function createMapStyle(slopeTileUrl) {
     },
     layers: [
       {
-        id: "osm-layer",
+        id: "basemap-layer",
         type: "raster",
-        source: "osm",
+        source: "basemap",
         paint: { "raster-opacity": 1.0 }
       },
       {

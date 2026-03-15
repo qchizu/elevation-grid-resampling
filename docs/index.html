@@ -33,14 +33,13 @@
         スライダーを左右に動かすと差異が一目でわかります。
       </p>
       <div class="legend">
-        <div class="legend-title">傾斜量の凡例（度）— グレースケール（90度飽和）</div>
+        <div class="legend-title">傾斜量の凡例（度）— グレースケール（45度飽和）</div>
         <div class="legend-bar"></div>
         <div class="legend-labels">
           <span>0°</span>
           <span>15°</span>
           <span>30°</span>
-          <span>45°</span>
-          <span>90°</span>
+          <span>45°以上</span>
         </div>
       </div>
     </section>
@@ -100,7 +99,7 @@
             <li>タイル: 07ed58, 07ed59, 07ed68, 07ed69</li>
             <li>座標系変換: EPSG:6675 → EPSG:6668</li>
             <li>出力解像度: 0.04秒角（1/90000°≈ 1m、基盤地図情報1mDEM相当）</li>
-            <li>傾斜量: <code>gdaldem slope</code>（度単位、90度飽和グレースケール）</li>
+            <li>傾斜量: <code>gdaldem slope</code>（度単位、45度飽和グレースケール）</li>
           </ul>
         </div>
         <div class="tech-card">
@@ -122,7 +121,8 @@
 
   <footer>
     <p>
-      データ: 林野庁 森林土木情報 / 地図: © OpenStreetMap contributors /
+      データ: 林野庁 森林土木情報 /
+      地図: <a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院</a> /
       <a href="https://github.com/qchizu/elevation-grid-resampling" target="_blank" rel="noopener">GitHub</a>
     </p>
   </footer>
