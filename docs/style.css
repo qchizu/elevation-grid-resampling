@@ -1,0 +1,265 @@
+/* ベーススタイル */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Meiryo", sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #2c2c2c;
+  background: #f5f5f5;
+}
+
+/* ヘッダー */
+header {
+  background: #1a3a5c;
+  color: #fff;
+  padding: 1.5rem 2rem;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+header .subtitle {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+/* メインコンテンツ */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+}
+
+section {
+  margin-top: 2rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a3a5c;
+  border-left: 4px solid #2a7fd4;
+  padding-left: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+
+/* 説明セクション */
+.description {
+  background: #fff;
+  border-radius: 6px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.description p {
+  margin-bottom: 0.6rem;
+}
+
+/* 凡例 */
+.legend {
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  background: #f0f4f8;
+  border-radius: 4px;
+}
+
+.legend-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.legend-bar {
+  height: 18px;
+  border-radius: 3px;
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,200,0.85) 5%,
+    rgba(255,230,100,0.88) 15%,
+    rgba(255,160,0,0.9) 30%,
+    rgba(200,80,0,0.94) 60%,
+    rgba(150,50,0,1) 100%
+  );
+  border: 1px solid #ccc;
+}
+
+.legend-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: #555;
+  margin-top: 0.25rem;
+}
+
+/* 比較マップ */
+.map-section {
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.map-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background: #1a3a5c;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+#comparison-container {
+  position: relative;
+  width: 100%;
+  height: 520px;
+}
+
+#map-before,
+#map-after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.map-note {
+  text-align: center;
+  font-size: 0.82rem;
+  color: #666;
+  padding: 0.5rem;
+  background: #f8f8f8;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* 断面図 */
+.profile-section {
+  background: #fff;
+  border-radius: 6px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.profile-section p {
+  margin-bottom: 0.8rem;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.chart-container {
+  position: relative;
+  height: 280px;
+}
+
+.profile-status {
+  text-align: center;
+  color: #888;
+  font-size: 0.85rem;
+}
+
+/* 技術的解説 */
+.technical {
+  background: #fff;
+  border-radius: 6px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+
+.tech-card {
+  background: #f8f9fb;
+  border-radius: 5px;
+  padding: 1rem;
+  border: 1px solid #e8edf2;
+}
+
+.tech-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a3a5c;
+  margin-bottom: 0.5rem;
+}
+
+.tech-card p,
+.tech-card ul {
+  font-size: 0.88rem;
+  color: #444;
+}
+
+.tech-card ul {
+  padding-left: 1.2rem;
+}
+
+.tech-card li {
+  margin-bottom: 0.2rem;
+}
+
+.tech-card a {
+  color: #2a7fd4;
+  text-decoration: none;
+}
+
+.tech-card a:hover {
+  text-decoration: underline;
+}
+
+code {
+  background: #eef2f7;
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  font-family: "Consolas", "Monaco", monospace;
+}
+
+/* フッター */
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 0.82rem;
+  color: #888;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 2rem;
+}
+
+footer a {
+  color: #2a7fd4;
+  text-decoration: none;
+}
+
+/* MapLibre Compare スライダーのスタイル上書き */
+.maplibregl-compare .compare-swiper-vertical {
+  background: #fff;
+  border: 2px solid #1a3a5c;
+}
+
+/* レスポンシブ */
+@media (max-width: 680px) {
+  header h1 {
+    font-size: 1.2rem;
+  }
+
+  #comparison-container {
+    height: 380px;
+  }
+
+  .chart-container {
+    height: 220px;
+  }
+}

@@ -1,0 +1,24 @@
+# 処理中間ファイル
+data/*.tif
+data/*.vrt
+data/merged.vrt
+data/dem_near.tif
+data/dem_bilinear.tif
+data/slope_near.tif
+data/slope_bilinear.tif
+data/colored_near.tif
+data/colored_bilinear.tif
+
+# タイルはGitで管理（GitHub Pagesで公開）
+# docs/tiles/ はコミット対象
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db

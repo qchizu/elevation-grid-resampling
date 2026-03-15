@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>標高グリッド リサンプリング比較 | nearest vs bilinear</title>
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/@maplibre/maplibre-gl-compare@0.5.0/dist/maplibre-gl-compare.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/@maplibre/maplibre-gl-compare@0.5.0/dist/maplibre-gl-compare.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>標高グリッド リサンプリング比較</h1>
+    <p class="subtitle">nearest（最近傍）vs bilinear（双線形）— 傾斜量図のアーティファクト検証</p>
+  </header>
+
+  <main>
+    <!-- 説明セクション -->
+    <section class="description">
+      <h2>背景と目的</h2>
+      <p>
+        基盤地図情報の標高グリッドデータは、平面直角座標系（JGD2011 / Japan Plane Rectangular CS VII）から
+        経緯度系（JGD2011 geographic, EPSG:6668）への変換時に
+        <strong>nearest（最近傍）リサンプリング</strong>を使用しているという仮説があります。
+        この処理により、傾斜量図（slope map）に<strong>グリッド状の不自然なアーティファクト</strong>が生じます。
+      </p>
+      <p>
+        本ページでは林野庁の0.5mメッシュLiDAR DEM（能登半島）を用い、
+        nearest と <strong>bilinear（双線形）リサンプリング</strong> の2種類を比較します。
+        スライダーを左右に動かすと差異が一目でわかります。
+      </p>
+      <div class="legend">
+        <div class="legend-title">傾斜量の凡例（%）</div>
+        <div class="legend-bar"></div>
+        <div class="legend-labels">
+          <span>0%</span>
+          <span>15%</span>
+          <span>30%</span>
+          <span>60%</span>
+          <span>100%以上</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 比較マップ -->
+    <section class="map-section">
+      <div class="map-labels">
+        <span class="label-left">◀ nearest（最近傍）</span>
+        <span class="label-right">bilinear（双線形） ▶</span>
+      </div>
+      <div id="comparison-container">
+        <div id="map-before"></div>
+        <div id="map-after"></div>
+      </div>
+      <p class="map-note">
+        スライダーをドラッグして左右を比較 ／ 地図はドラッグ・スクロールで移動・拡大縮小できます
+      </p>
+    </section>
+
+    <!-- 断面図 -->
+    <section class="profile-section">
+      <h2>標高断面図</h2>
+      <p>
+        東西方向の断面線（北緯37.458°付近、約7.5km）における標高プロファイルを示します。
+        2つのリサンプリング手法の差異をご確認ください。
+      </p>
+      <div class="chart-container">
+        <canvas id="profile-chart"></canvas>
+      </div>
+      <p id="profile-status" class="profile-status">断面図データを読み込み中...</p>
+    </section>
+
+    <!-- 技術的解説 -->
+    <section class="technical">
+      <h2>技術的解説</h2>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <h3>nearest（最近傍）</h3>
+          <p>
+            変換後の各ピクセルに対し、入力グリッドの<strong>最も近いピクセル値</strong>をそのまま割り当てます。
+            座標変換で元のグリッドの格子線が斜めになると、その境界が階段状のパターンとして
+            傾斜量図に現れます。これが「グリッドアーティファクト」の正体です。
+          </p>
+        </div>
+        <div class="tech-card">
+          <h3>bilinear（双線形）</h3>
+          <p>
+            変換後の各ピクセルに対し、入力グリッドの<strong>周辺4ピクセルの加重平均</strong>を計算します。
+            補間によって標高値が滑らかに変化するため、傾斜量図でも
+            グリッドパターンのアーティファクトが発生しません。
+          </p>
+        </div>
+        <div class="tech-card">
+          <h3>データ</h3>
+          <ul>
+            <li>林野庁 LiDAR 0.5mメッシュDEM（能登半島 2024年）</li>
+            <li>タイル: 07ed58, 07ed59, 07ed68, 07ed69</li>
+            <li>座標系変換: EPSG:6675 → EPSG:6668</li>
+            <li>出力解像度: 0.000009°（≈ 1m）</li>
+            <li>傾斜量: <code>gdaldem slope -p</code>（百分率）</li>
+          </ul>
+        </div>
+        <div class="tech-card">
+          <h3>処理ツール</h3>
+          <ul>
+            <li>GDAL（gdalbuildvrt, gdalwarp, gdaldem, gdal2tiles）</li>
+            <li>MapLibre GL JS（地図表示・スライダー比較）</li>
+            <li>Chart.js（断面図）</li>
+          </ul>
+          <p>
+            <a href="https://github.com/qchizu/elevation-grid-resampling" target="_blank" rel="noopener">
+              ソースコード（GitHub）
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      データ: 林野庁 森林土木情報 / 地図: © OpenStreetMap contributors /
+      <a href="https://github.com/qchizu/elevation-grid-resampling" target="_blank" rel="noopener">GitHub</a>
+    </p>
+  </footer>
+
+  <script src="map.js"></script>
+  <script src="profile.js"></script>
+</body>
+</html>
