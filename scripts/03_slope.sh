@@ -9,7 +9,6 @@ echo "=== ステップ3: 傾斜量図生成 ==="
 gdaldem slope \
     "$OUT_DIR/dem_near.tif" \
     "$OUT_DIR/slope_near.tif" \
-    -p \
     -co COMPRESS=DEFLATE \
     -co TILED=YES
 echo "  完了: slope_near.tif"
@@ -17,7 +16,6 @@ echo "  完了: slope_near.tif"
 gdaldem slope \
     "$OUT_DIR/dem_bilinear.tif" \
     "$OUT_DIR/slope_bilinear.tif" \
-    -p \
     -co COMPRESS=DEFLATE \
     -co TILED=YES
 echo "  完了: slope_bilinear.tif"
