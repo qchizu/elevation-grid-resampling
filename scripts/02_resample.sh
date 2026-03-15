@@ -1,6 +1,6 @@
 #!/bin/bash
 # ステップ2: nearest/bilinearで経緯度系に変換（1mメッシュ相当）
-# ターゲット: JGD2011 geographic (EPSG:6668)、解像度 0.4秒 = 1/9000° ≈ 12m（基盤地図情報10mDEM相当）
+# ターゲット: JGD2011 geographic (EPSG:6668)、解像度 0.04秒 = 1/90000° ≈ 1m（基盤地図情報1mDEM相当）
 set -eu
 
 OUT_DIR="$(dirname "$0")/../data"

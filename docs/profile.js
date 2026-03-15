@@ -4,26 +4,27 @@
  * profile_data.json を読み込み、nearest と bilinear の
  * 標高プロファイルを重ねて表示する。
  * 地図の表示範囲（経度）を断面図上にハイライト表示する。
+ *
+ * 注: map.js が先に読み込まれ、TILE_BASE と mapBefore がグローバルに定義済みであること。
  */
 
 (async function () {
   const statusEl = document.getElementById("profile-status");
 
   try {
-    // データ読み込み
-    const basePath = location.pathname.replace(/\/$/, "").replace(/\/index\.html$/, "");
-    const res = await fetch(`${basePath}/profile_data.json`);
+    // TILE_BASE は map.js で定義済みのグローバル変数を再利用
+    const res = await fetch(`${TILE_BASE}/profile_data.json`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
 
     statusEl.style.display = "none";
 
-    const distances = data.distances;
-    const nearElev = data.elevations.near;
+    const distances  = data.distances;
+    const nearElev   = data.elevations.near;
     const bilinearElev = data.elevations.bilinear;
-    const startLon = data.profile_line.start[0];
-    const endLon   = data.profile_line.end[0];
-    const totalDist = data.total_distance_m;
+    const startLon   = data.profile_line.start[0];
+    const endLon     = data.profile_line.end[0];
+    const totalDist  = data.total_distance_m;
 
     // 経度 → 断面距離（m）の変換
     function lonToDistance(lon) {
@@ -42,7 +43,6 @@
     // 地図表示範囲を断面図に描画するカスタムプラグイン
     const mapViewRangePlugin = {
       id: "mapViewRange",
-      // 現在の表示範囲（断面距離）
       _xMin: null,
       _xMax: null,
 
@@ -55,10 +55,8 @@
         if (right <= left) return;
 
         ctx.save();
-        // 薄い青でハイライト
         ctx.fillStyle = "rgba(80, 130, 220, 0.12)";
         ctx.fillRect(left, chartArea.top, right - left, chartArea.height);
-        // 境界線
         ctx.strokeStyle = "rgba(80, 130, 220, 0.5)";
         ctx.lineWidth = 1;
         ctx.setLineDash([4, 3]);
@@ -104,17 +102,11 @@
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        interaction: {
-          mode: "index",
-          intersect: false
-        },
+        interaction: { mode: "index", intersect: false },
         plugins: {
           legend: {
             position: "top",
-            labels: {
-              font: { size: 13 },
-              usePointStyle: true
-            }
+            labels: { font: { size: 13 }, usePointStyle: true }
           },
           tooltip: {
             callbacks: {
@@ -126,19 +118,11 @@
         scales: {
           x: {
             type: "linear",
-            title: {
-              display: true,
-              text: "距離（m）",
-              font: { size: 12 }
-            },
+            title: { display: true, text: "距離（m）", font: { size: 12 } },
             ticks: { font: { size: 11 } }
           },
           y: {
-            title: {
-              display: true,
-              text: "標高（m）",
-              font: { size: 12 }
-            },
+            title: { display: true, text: "標高（m）", font: { size: 12 } },
             ticks: { font: { size: 11 } }
           }
         }
@@ -146,12 +130,37 @@
     });
 
     // 地図の表示範囲変更を受信して断面図を更新
+    // requestAnimationFrame でデバウンスし、moveend 連射時のフレームを間引く
+    let rafId = null;
     window.addEventListener("mapBoundsChanged", (e) => {
       const { west, east } = e.detail;
-      mapViewRangePlugin._xMin = lonToDistance(west);
-      mapViewRangePlugin._xMax = lonToDistance(east);
-      chart.update("none");  // アニメーションなしで再描画
+      const rawMin = lonToDistance(west);
+      const rawMax = lonToDistance(east);
+
+      // プロファイル範囲と重なりがなければハイライト消去
+      if (rawMax < 0 || rawMin > totalDist) {
+        mapViewRangePlugin._xMin = null;
+        mapViewRangePlugin._xMax = null;
+      } else {
+        mapViewRangePlugin._xMin = rawMin;
+        mapViewRangePlugin._xMax = rawMax;
+      }
+
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        chart.update("none");
+        rafId = null;
+      });
     });
+
+    // chart 初期化完了後に現在の地図表示範囲を反映
+    // map.js の load イベントとの競合を避け、直接 getBounds() を参照
+    if (typeof mapBefore !== "undefined") {
+      const bounds = mapBefore.getBounds();
+      window.dispatchEvent(new CustomEvent("mapBoundsChanged", {
+        detail: { west: bounds.getWest(), east: bounds.getEast() }
+      }));
+    }
 
     // 断面の説明文を補完
     const infoEl = document.createElement("p");
