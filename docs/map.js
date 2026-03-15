@@ -108,4 +108,3 @@ function notifyProfileBounds() {
 }
 
 mapBefore.on("moveend", notifyProfileBounds);
-mapBefore.on("load", notifyProfileBounds);
