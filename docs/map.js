@@ -95,3 +95,16 @@ const compare = new maplibregl.Compare(
   "#comparison-container",
   { mousemove: false }
 );
+
+/**
+ * 地図の表示範囲を断面図に通知する
+ * mapBefore の表示範囲（経度）をカスタムイベントで送信
+ */
+function notifyProfileBounds() {
+  const bounds = mapBefore.getBounds();
+  window.dispatchEvent(new CustomEvent("mapBoundsChanged", {
+    detail: { west: bounds.getWest(), east: bounds.getEast() }
+  }));
+}
+
+mapBefore.on("moveend", notifyProfileBounds);

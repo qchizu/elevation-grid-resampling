@@ -33,14 +33,14 @@
         スライダーを左右に動かすと差異が一目でわかります。
       </p>
       <div class="legend">
-        <div class="legend-title">傾斜量の凡例（%）</div>
+        <div class="legend-title">傾斜量の凡例（度）— グレースケール（90度飽和）</div>
         <div class="legend-bar"></div>
         <div class="legend-labels">
-          <span>0%</span>
-          <span>15%</span>
-          <span>30%</span>
-          <span>60%</span>
-          <span>100%以上</span>
+          <span>0°</span>
+          <span>15°</span>
+          <span>30°</span>
+          <span>45°</span>
+          <span>90°</span>
         </div>
       </div>
     </section>
@@ -99,8 +99,8 @@
             <li>林野庁 LiDAR 0.5mメッシュDEM（能登半島 2024年）</li>
             <li>タイル: 07ed58, 07ed59, 07ed68, 07ed69</li>
             <li>座標系変換: EPSG:6675 → EPSG:6668</li>
-            <li>出力解像度: 0.000009°（≈ 1m）</li>
-            <li>傾斜量: <code>gdaldem slope -p</code>（百分率）</li>
+            <li>出力解像度: 0.04秒角（1/90000°≈ 1m、基盤地図情報1mDEM相当）</li>
+            <li>傾斜量: <code>gdaldem slope</code>（度単位、90度飽和グレースケール）</li>
           </ul>
         </div>
         <div class="tech-card">
